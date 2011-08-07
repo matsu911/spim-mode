@@ -20,11 +20,10 @@
     (delete-other-windows)
     (switch-to-buffer-other-window *lua-process-buffer*)
     (other-window -1))
-  (let ((filename (buffer-file-name (current-buffer))))
-    (flet ((send-command (command)
-			 (comint-send-string (get-buffer-process *lua-process-buffer*) command)))
-      (send-command (format "load \"%s\"\n" (buffer-file-name (current-buffer)))) 
-      (send-command "run\n"))))
+  (flet ((send-command (command)
+		       (comint-send-string (get-buffer-process *lua-process-buffer*) command)))
+    (send-command (format "load \"%s\"\n" (buffer-file-name (current-buffer)))) 
+    (send-command "run\n")))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.as$" . spim-mode))
