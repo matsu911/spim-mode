@@ -1,0 +1,2 @@
+* What is this?
+  This is a Emacs major mode for [[http://pages.cs.wisc.edu/~larus/spim.html][SPIM, A MIPS32 Simulator]].
