@@ -1,7 +1,7 @@
 (require 'asm-mode)
 (require 'comint)
 
-(defvar *lua-process-buffer* nil
+(defvar *spim-process-buffer* nil
   "Buffer used for communication with SPIM subprocess")
 
 (defun spim-mode ()
@@ -13,15 +13,16 @@
 
 (defun spim-exec-file ()
   (interactive)
-  (when (buffer-name *lua-process-buffer*)
-    (kill-buffer *lua-process-buffer*))
-  (progn
-    (setq *lua-process-buffer* (apply 'make-comint "spim" "spim" nil '())) 
-    (delete-other-windows)
-    (switch-to-buffer-other-window *lua-process-buffer*)
-    (other-window -1))
   (flet ((send-command (command)
-		       (comint-send-string (get-buffer-process *lua-process-buffer*) command)))
+		       (comint-send-string (get-buffer-process *spim-process-buffer*) command)))
+    (when *spim-process-buffer*
+      (process-kill-without-query (get-buffer-process *spim-process-buffer*))
+      (kill-buffer *spim-process-buffer*))
+    (progn
+      (setq *spim-process-buffer* (apply 'make-comint "spim" "spim" nil '())) 
+      (delete-other-windows)
+      (switch-to-buffer-other-window *spim-process-buffer*)
+      (other-window -1))
     (send-command (format "load \"%s\"\n" (buffer-file-name (current-buffer)))) 
     (send-command "run\n")))
 
